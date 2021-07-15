@@ -1,0 +1,105 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge  
+  - accept_offer
+  - deny_offer
+  - get_started
+  - information
+ 
+
+actions:
+  - action_main 
+  - action_deny_offer
+  - action_start_conversation
+
+
+
+slots: 
+  vin_value:
+    type: text
+    influence_conversation: true 
+
+  miles_value:
+    type: text
+    influence_conversation: true 
+    
+  phone_number_value:
+    type: text
+    influence_conversation: true 
+    
+    
+  interested_in_selling_car:
+    type: bool
+    influence_conversation: true 
+    
+
+    
+  interested_in_tentative_price:
+    type: bool
+    influence_conversation: true 
+    
+    
+  have_license_plate:
+    type: bool
+    influence_conversation: true 
+
+  vehicle_owning_status:
+    type: bool
+    influence_conversation: true 
+
+  have_miles:
+    type: bool
+    influence_conversation: true 
+   
+
+  would_like_to_talk_in_detail:
+    type: bool
+    influence_conversation: true 
+    
+ 
+
+
+
+      
+
+responses: 
+  utter_submit:
+  - text: Ok. Thanks!
+
+  utter_greet:
+    - text: "Hey! How are you?"
+
+  utter_cheer_up:
+    - text: "Here is something to cheer you up:"
+      image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+    - text: "Did that help you?"
+
+  utter_happy:
+    - text: "Great, carry on!"
+
+  utter_goodbye:
+    - text: "Bye"
+
+  utter_iamabot:
+    - text: "I am a bot, powered by Rasa."
+
+  utter_thanks:
+    - text: Thanks for providing the values.
+
+  utter_send_link:
+    - text: No Problem, you are welcome to visit our website and get instant price on your vehcile. [www.buyyourcar.com] (https://www.buyyourcar.com/)
+
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

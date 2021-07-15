@@ -1,0 +1,178 @@
+version: "2.0"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - good afternoon
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+
+
+
+
+
+
+- intent: affirm
+  examples: |
+    - yes 
+    - yes i am
+    - yes i am interested
+    - yup
+    - yeh
+    - sure 
+    - interested 
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+    - \w{4,18}
+
+- intent: deny
+  examples: |
+    - No
+    - NO
+    - do not
+    - don't
+    - why
+    - Nope
+    - Never
+    - Null
+    - Sorry
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+    
+
+- intent: mood_great
+  examples: |
+    - **REMOVED
+
+- intent: mood_unhappy
+  examples: |
+    - **REMOVED
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+
+ 
+
+
+ 
+ 
+
+
+ 
+- intent: deny_offer
+  examples: |
+    - No
+    - NO
+    - do not
+    - don't
+    - why
+    - Nope
+    - Never
+    - Null
+    - Sorry
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+ 
+- intent: accept_offer
+  examples: |
+    - yes 
+    - yes i am
+    - yes i am interested
+    - yup
+    - yeh
+    - sure 
+    - interested 
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+    - \w{4,18}
+    
+
+
+- intent: information
+  examples: |
+    - \w{4,18}
+
+
+ 
+
+ 
+ 
