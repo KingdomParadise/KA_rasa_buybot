@@ -1,12 +1,3 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
-
-
-# This is a simple example for a custom action which utters "Hello World!"
-
 from os import link
 from typing import Any, Text, Dict, List
 from datetime import datetime
@@ -14,6 +5,7 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
 from .api_handler import  VIN_VALIDATOR,LICENSE_PLATE_VALIDATOR
+from .price_api import FETCH_PRICE
 import re
 
 
@@ -72,6 +64,7 @@ class ActionMain(Action):
             print('--> Received VIN VALUE')
             response = VIN_VALIDATOR(message)
             if response is not  None: 
+                dispatcher.utter_message(text=response)
                 dispatcher.utter_message(text="Is this your vehicle?", buttons=buttons)
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
@@ -81,6 +74,8 @@ class ActionMain(Action):
 
 
         elif message.replace(' ','').replace(',','').isnumeric() is True   and tracker.get_slot('miles_value') is None and tracker.get_slot('vin_value') is not None:
+            price = FETCH_PRICE(tracker.get_slot('vin_value'))
+            dispatcher.utter_message(text=price)
             dispatcher.utter_message(text="Here is the price range, would you like to talk to our rep in detail about this price",buttons=buttons)
             return [SlotSet('miles_value',message)] 
  
@@ -88,7 +83,8 @@ class ActionMain(Action):
             print('--> Received Lisense Plate Number')
             response = LICENSE_PLATE_VALIDATOR(message)
             if response is not None:
-                dispatcher.utter_message(text="Is this your vehicle?", buttons=buttons)
+                dispatcher.utter_message(text=response)
+                dispatcher.utter_message(text=f"Is this your vehicle?", buttons=buttons)
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
                 dispatcher.utter_message(text="Wrong Lisense Plate Number")
@@ -162,6 +158,7 @@ class ActionDenyOffer(Action):
             print('--> Received VIN VALUE')
             response = VIN_VALIDATOR(message)
             if response is not  None: 
+                dispatcher.utter_message(text=response)
                 dispatcher.utter_message(text="Is this your vehicle?", buttons=buttons)
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
@@ -177,7 +174,8 @@ class ActionDenyOffer(Action):
             print('--> Received Lisense Plate Number')
             response = LICENSE_PLATE_VALIDATOR(message)
             if response is not None:
-                dispatcher.utter_message(text="Is this your vehicle?", buttons=buttons)
+                dispatcher.utter_message(text=response)
+                dispatcher.utter_message(text=f"Is this your vehicle?", buttons=buttons)
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
                 dispatcher.utter_message(text="Wrong Lisense Plate Number")
@@ -191,6 +189,8 @@ class ActionDenyOffer(Action):
 
         elif message.replace(' ','').replace(',','').isnumeric() is True and tracker.get_slot('miles_value') is None and tracker.get_slot('vin_value') is not None:
             print('--> Received miles value')
+            price = FETCH_PRICE(tracker.get_slot('vin_value'))
+            dispatcher.utter_message(text=price)
             dispatcher.utter_message(text="Here is the price range, would you like to talk to our rep in detail about this price",buttons=buttons)
             return [SlotSet('miles_value',message)] 
  
