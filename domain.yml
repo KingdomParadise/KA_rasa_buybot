@@ -30,6 +30,10 @@ slots:
     type: text
     influence_conversation: true 
     
+  # state_code:
+  #   type: text
+  #   influence_conversation: true 
+    
   phone_number_value:
     type: text
     influence_conversation: true 

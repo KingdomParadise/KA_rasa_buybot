@@ -23,9 +23,7 @@ class ActionMain(Action):
         
 
         message=tracker.latest_message['text']
-        phone_numbers = re.findall(r'[\+\(]?[0-9][0-9 .\-\(\)]{8,}[0-9]', message)
-        print('____',tracker.get_slot('vin_value')=='')
-        print(tracker.get_slot('vin_value'))
+        phone_numbers = re.findall(r'[\+\(]?[0-9][0-9 .\-\(\)]{8,}[0-9]', message) 
         print(message)
         if message.lower()=='/accept_offer':
             if tracker.get_slot('interested_in_selling_car') is True and tracker.get_slot('interested_in_tentative_price') is not True:
@@ -39,10 +37,14 @@ class ActionMain(Action):
 
 
             elif tracker.get_slot('have_license_plate') is True and tracker.get_slot('vehicle_owning_status') is not True:
-                dispatcher.utter_message(text="Please provide your VIN / License Plate Number")
+                dispatcher.utter_message(text="Please provide your 17 digit VIN / License Plate Number")
                 return [] 
 
             elif tracker.get_slot('vehicle_owning_status') is True and tracker.get_slot('have_miles') is not True:
+                buttons = [
+                    {"payload": "/accept_offer", "title": "Yes, i can give miles."},
+                    {"payload": "/deny_offer", "title": "No, i don't have miles."},
+                ] 
                 dispatcher.utter_message(text="Ok Great, Can you please provide miles on the vehicle ?", buttons=buttons)
                 return [SlotSet('have_miles',True)] 
            
@@ -68,16 +70,21 @@ class ActionMain(Action):
                 dispatcher.utter_message(text="Is this your vehicle?", buttons=buttons)
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
-                # dispatcher.utter_message(text="No Problem, you are welcome to visit our website and get instant price on your vehcile. (www.buyyourcar.com)")
+                dispatcher.utter_message(text="Wrong VIN value")
                 dispatcher.utter_template('utter_send_link',tracker)
                 return []
 
 
         elif message.replace(' ','').replace(',','').isnumeric() is True   and tracker.get_slot('miles_value') is None and tracker.get_slot('vin_value') is not None:
             price = FETCH_PRICE(tracker.get_slot('vin_value'))
-            dispatcher.utter_message(text=price)
-            dispatcher.utter_message(text="Here is the price range, would you like to talk to our rep in detail about this price",buttons=buttons)
-            return [SlotSet('miles_value',message)] 
+            if price is not None:
+                dispatcher.utter_message(text=price)
+                dispatcher.utter_message(text="Here is the price range, would you like to talk to our rep in detail about this price",buttons=buttons)
+                return [SlotSet('miles_value',message)] 
+            else:
+                dispatcher.utter_message("Sorry, unable to tell you the price.")
+                dispatcher.utter_template('utter_send_link',tracker)
+                return []
  
         elif message.replace(' ','').isalnum() and tracker.get_slot('vehicle_owning_status') is not  True:
             print('--> Received Lisense Plate Number')
@@ -88,7 +95,6 @@ class ActionMain(Action):
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
                 dispatcher.utter_message(text="Wrong Lisense Plate Number")
-                # dispatcher.utter_message(text="No Problem, you are welcome to visit our website and get instant price on your vehcile. (www.buyyourcar.com)")
                 dispatcher.utter_template('utter_send_link',tracker)
                 return []
 
@@ -101,10 +107,8 @@ class ActionMain(Action):
                 
 
         elif message.lower()=='/deny_offer':
-            # dispatcher.utter_message(text="No Problem, you are welcome to visit our website and get instant price on your vehcile. (www.buyyourcar.com)")       
             dispatcher.utter_template('utter_send_link',tracker)
             return []
-        
         return []
 
 
@@ -131,10 +135,10 @@ class ActionStartConversation(Action):
         return "action_start_conversation"
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]: 
         buttons = [
-                {"payload": "/accept_offer", "title": "Yes"},
-                {"payload": "/deny_offer", "title": "No"},
+                {"payload": "/accept_offer", "title": "Yes, I am ready to talk with with a Bot." },
+                {"payload": "/deny_offer", "title": "No, i can't talk with a Bot."},
             ]
-        dispatcher.utter_message(text="Thank you for your interest in buy your car, we offer highest price for your vehicle. Are you interested in selling your vehicle ?", buttons=buttons)
+        dispatcher.utter_message(text="Thanks for your interest in Buy Your Car, this is an interactive web chat for you to find out the price of your vehicle without any human intervention and pressure, should we start now ?", buttons=buttons)
         return [SlotSet('interested_in_selling_car',True)]
 
 
@@ -147,13 +151,10 @@ class ActionDenyOffer(Action):
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]: 
         message=tracker.latest_message['text']
         phone_numbers = re.findall(r'[\+\(]?[0-9][0-9 .\-\(\)]{8,}[0-9]', message)
-
         buttons = [
                 {"payload": "/accept_offer", "title": "Yes"},
                 {"payload": "/deny_offer", "title": "No"},
             ] 
-
-
         if len(message)==17 and ' ' not in message and tracker.get_slot('vehicle_owning_status') is not  True:
             print('--> Received VIN VALUE')
             response = VIN_VALIDATOR(message)
@@ -163,12 +164,8 @@ class ActionDenyOffer(Action):
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
                 dispatcher.utter_message(text="Wrong VIN value")
-                # dispatcher.utter_message(text="No Problem, you are welcome to visit our website and get instant price on your vehcile. (www.buyyourcar.com)")
                 dispatcher.utter_template('utter_send_link',tracker)
                 return []
-
-
-
 
         elif message.replace(' ','').isalnum() and tracker.get_slot('vehicle_owning_status') is not  True:
             print('--> Received Lisense Plate Number')
@@ -179,7 +176,6 @@ class ActionDenyOffer(Action):
                 return [SlotSet('vin_value',message),SlotSet('vehicle_owning_status',True)] 
             else:
                 dispatcher.utter_message(text="Wrong Lisense Plate Number")
-                # dispatcher.utter_message(text="No Problem, you are welcome to visit our website and get instant price on your vehcile. (www.buyyourcar.com)")
                 dispatcher.utter_template('utter_send_link',tracker)
                 return []
 
@@ -202,7 +198,6 @@ class ActionDenyOffer(Action):
         
 
         elif message.lower()=='/deny_offer':
-            # dispatcher.utter_message(text="No Problem, you are welcome to visit our website and get instant price on your vehcile. (www.buyyourcar.com)")
             dispatcher.utter_template('utter_send_link',tracker)
             return []
         else:

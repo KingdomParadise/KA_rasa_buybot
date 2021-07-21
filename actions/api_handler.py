@@ -1,4 +1,5 @@
 import requests,re
+from .data import states
 
 vin = "XXXXXXX43AS0XXXRR"
 vin = "JT4RN55R5G0222654"
@@ -44,11 +45,21 @@ def LICENSE_PLATE_VALIDATOR(plate_number):
 
 
 
-if __name__ == '__main__':
-     print(LICENSE_PLATE_VALIDATOR('22r'))
- 
-# text = '+92 3167815639  +92 3167815639  '
-# phone_numbers = re.findall(r'[\+\(]?[0-9][0-9 .\-\(\)]{8,}[0-9]', text)
+def VERIFY_STATE(given_state):
+    if len(given_state)==2:given_state=given_state.upper()
+    else : given_state=given_state.capitalize()
+    states_pool = list(states.keys()) +list(states.values()) 
+    if given_state in states_pool:
+        if len(given_state)==2:
+            return given_state            
+        else:
+            state_code = [code for code,name in states.items() if name==given_state][0]
+            return state_code
+    else: return None
 
-# print(phone_numbers)
- 
+if __name__ == '__main__':
+    #  print(LICENSE_PLATE_VALIDATOR('22r'))
+    given_state = 'AK'
+    print(VERIFY_STATE(given_state))
+         
+  

@@ -1,0 +1,29 @@
+We assume that Ad is making aware users about good offer to sell their car
+
+Step 1 -> Check intent
+
+1.A -> Interested - I want to sell my car or I am interested in your offer -> 2
+1.B - > What can you offer? -> 3
+
+2 -> That's great. Could you pls share your VIN number? -> 4
+
+3 -> We have great offers going on. You can get you a improved model while keeping your payments same or even lesser in some cases. Are you interested? - 6
+
+
+4.A -> Yes it is 1VWAH7A34DC146014. -> 5
+4.B -> Ok thanks (Stop)
+
+
+6.A Yes ->2
+6.B No -> Ok thanks (Stop)
+
+5. GET https://sandbox.api.kbb.com/idws/vehicle/vin/id/1VWAH7A34DC146014/?api_key=a11bf69647084057907e71f0d -> Vehicle details -> If it returns more than two vehicle, then we will ask user which vehicle is yours? like - Volkswagen Wolfsburg Edition Sedan 4D or Volkwagen Passat 2.5L S Sedan 4D -> 7
+
+7. We will ask user if you have 5-Cyl, 2.5 Liter. Reply with Yes/No
+	We will ask for all available options ids for a vehicle -> 8
+	
+8. Vehicle ids, vehicle options ids -> Our system will fetch price using https://pauc.syndication.kbb.com/priceadvisorusedcar/fairpurchaseprice?APIKey=07d1e963-c817-4aff-899f-1e38b71bbe88&ZIPCode=92618&VehicleId=446136&OptionIds=9252788,9252950
+ We can offer you $10,032. Would you like to sell your car? -> 9
+ 
+ 9.A Yes -> Great. When can we setup an phone appointment with you to get it going?
+ 9.B No -> Alright let us know in case you change your mind.

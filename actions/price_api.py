@@ -54,11 +54,12 @@ def get_data(token,vin):
     r = requests.get(f'https://api.manheim.com/valuations/vin/{vin}?include=retail,historical,forecast',
                       headers={'Authorization': f'{token["token_type"]} {token["access_token"]}'})
     data = r.json()['items'][0]['adjustedPricing']['wholesale']
-     
-    text='Wholesale Data -> '
-    for val in data:
-        text += val +':  '+ str(data[val])+ ',  '
-    return text
+
+    if data['average']==0 and data['above']==0 and data['below']==0:
+        return None
+    else:
+        text=f'Price range -> {data["average"]} USD  ~  {data["above"]} USD' 
+        return text
 
 
 
@@ -79,7 +80,7 @@ def FETCH_PRICE(value):
     else:
         vin=LICENSE_PLATE_VALIDATOR(value)
         print(vin)
-        price = get_data(token,vin)
+        price = get_data(token,vin) 
         print(price)
         return price
 
