@@ -2,37 +2,69 @@ version: "2.0"
 
 intents:
   - greet
-  - goodbye
-  - affirm
-  - deny
+  - goodbye 
   - mood_great
   - mood_unhappy
   - bot_challenge  
-  - accept_offer
-  - deny_offer
+  - approve_offer
+  - deny_proposal
   - get_started
-  - information
+  - text_data
+  - i_can_provide_vin
+  - i_have_plate
  
 
 actions:
-  - action_main 
-  - action_deny_offer
   - action_start_conversation
+  - action_approve_offer 
+  - action_deny_proposal
+  - action_handle_text_data
+  - action_i_can_provide_vin
+  - action_i_have_plate
+  - action_ask_previous_question
+  - action_ask_previous_question_level_2
 
 
 
-slots: 
-  vin_value:
-    type: text
+slots:  
+
+
+  stop_bot:
+    type: bool
+    influence_conversation: true 
+    
+
+  miles_locker:
+    type: bool
+    influence_conversation: true 
+    
+
+  vin_fetched_locker:
+    type: bool
     influence_conversation: true 
 
+  price_range_fetched_locker:
+    type: bool
+    influence_conversation: true 
+    
+
+    
+  phone_number_locker:
+    type: bool
+    influence_conversation: true 
+    
   miles_value:
     type: text
     influence_conversation: true 
     
-  # state_code:
-  #   type: text
-  #   influence_conversation: true 
+  fetched_cars:
+    type: text
+    influence_conversation: true 
+    
+    
+  open_approve_offers_portal:
+    type: bool
+    influence_conversation: true 
     
   phone_number_value:
     type: text
@@ -50,7 +82,20 @@ slots:
     influence_conversation: true 
     
     
-  have_license_plate:
+  license_plate_value:
+    type: text
+    influence_conversation: true 
+        
+  vin_value:
+    type: text
+    influence_conversation: true 
+            
+  state_value:
+    type: text
+    influence_conversation: true 
+    
+    
+  license_plate_or_vin:
     type: bool
     influence_conversation: true 
 
@@ -101,6 +146,25 @@ responses:
 
   utter_send_link:
     - text: No Problem, you are welcome to visit our website and get instant price on your vehcile. [www.buyyourcar.com] (https://www.buyyourcar.com/)
+
+  utter_send_link_invalid_state:
+    - text: Given State name is not valid. Please re-enter your State name again or you can try to visit our website and get instant price on your vehicle. [www.buyyourcar.com] (https://www.buyyourcar.com/)
+
+
+  utter_send_link_invalid_vin:
+    - text: I don't think the VIN you have provided is valid. Please re-enter your VIN again or you can try to visit our website and get instant price on your vehicle.  [www.buyyourcar.com] (https://www.buyyourcar.com/)
+
+    
+  utter_send_link_invalid_license_plate:
+    - text: I don't think the license plate  you have provided is valid. Please re-enter your license plate  again or you can try to visit our website and get instant price on your vehicle.  [www.buyyourcar.com] (https://www.buyyourcar.com/)
+
+    
+  utter_send_link_invalid_miles:
+    - text: I don't think the miles you have provided is valid. Please re-enter your miles  again or you can try to visit our website and get instant price on your vehicle.  [www.buyyourcar.com] (https://www.buyyourcar.com/)
+
+    
+  utter_send_link_invalid_phone_number:
+    - text: I don't think the phone number you have provided is valid. Please re-enter your phone number  again or you can try to visit our website and get instant price on your vehicle.  [www.buyyourcar.com] (https://www.buyyourcar.com/)
 
 
 

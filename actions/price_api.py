@@ -5,29 +5,7 @@ API_KEY = 'nqzum2aq44amvq8g8b8wbqx4'
 SECRET_KEY = '2FgCD9uN8b'
 TOKEN_ENDPOINT = 'https://api.manheim.com/oauth2/token.oauth2'
 
-
-
-
-
-
-
-
-
-def LICENSE_PLATE_VALIDATOR(plate_number):
-    print('--> LICENSE PLATE API CALLED')
-    headers = {
-        "x-rapidapi-host": "us-license-plate-to-vin.p.rapidapi.com",
-        "x-rapidapi-key": "ee1de273afmsh395876c18b8894dp182de0jsn9003b89dd005",
-    }
-    url = "https://us-license-plate-to-vin.p.rapidapi.com/licenseplate"
-    querystring = {"plate":str(plate_number),"state":"CA"}
-    response = requests.request("GET", url, headers=headers, params=querystring).json()
-    if 'error' in response.keys():return None
-    else:
-        return response['specifications']['vin']
-
  
-
 
 def get_encoded_header():
     authorization_string = API_KEY + ":" + SECRET_KEY
@@ -58,13 +36,13 @@ def get_data(token,vin):
     if data['average']==0 and data['above']==0 and data['below']==0:
         return None
     else:
-        text=f'Price range -> {data["average"]} USD  ~  {data["above"]} USD' 
+        text=f'{data["average"]} USD  ~  {data["above"]} USD' 
         return text
 
 
 
-vin='JHMGE8H43AS002030'
 vin='JT4RN55R5G0222654'
+vin='JHMGE8H43AS002030'
 
 def FETCH_PRICE(value):
     print('--> Calling FETCH_PRICE API')
@@ -75,15 +53,9 @@ def FETCH_PRICE(value):
         token = get_access_token(header)
     if len(str(value))==17: 
         price = get_data(token,value)
-        print(price)
-        return price
-    else:
-        vin=LICENSE_PLATE_VALIDATOR(value)
-        print(vin)
-        price = get_data(token,vin) 
-        print(price)
+        print("** PRICE FETCHED --> ", price)
         return price
 
 
 if __name__ == '__main__':
-    FETCH_PRICE('2w')
+    FETCH_PRICE(vin)

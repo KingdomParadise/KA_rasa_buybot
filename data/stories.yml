@@ -8,23 +8,104 @@ stories:
 
 
 
-- story:  CONVERSATION chat path
+- story:  CONVERSATION chat path1
   steps:  
-  - intent: accept_offer
-  - action: action_main 
-  - intent: information
-  - action: action_main
+  - intent: approve_offer
+  - action: action_approve_offer 
+
+  - intent: text_data
+  - action: action_handle_text_data
+
+  - intent: deny_proposal
+  - action: action_deny_proposal 
+   
+   
+
+
+
+
+
+
+- story:  CONVERSATION chat path2
+  steps:  
+  - intent: approve_offer
+  - action: action_approve_offer 
+
+  - intent: deny_proposal
+  - action: action_deny_proposal 
  
-  - intent: affirm
-  - action: action_main  
-  - intent: information
-  - action: action_main
+ 
+
+
+
+
+- story:  CONVERSATION chat path3
+  steps:  
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+
+  - intent: i_have_plate
+  - action: action_i_have_plate
+ 
+  - intent: i_can_provide_vin
+  - action: action_i_can_provide_vin
+
+
+  - intent: text_data
+  - action: action_handle_text_data
+  - intent: approve_offer
+  - action: action_approve_offer 
+
+
+  - intent: deny_proposal
+  - action: action_deny_proposal 
+ 
+ 
+
+
+
+- story:  CONVERSATION chat path4
+  steps:  
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+  - intent: approve_offer
+  - action: action_approve_offer 
+
+ 
+  - intent: i_can_provide_vin
+  - action: action_i_can_provide_vin
+
+  - intent: i_have_plate
+  - action: action_i_have_plate
+
+  - intent: text_data
+  - action: action_handle_text_data
+  - intent: approve_offer
+  - action: action_approve_offer 
+
+
+  - intent: deny_proposal
+  - action: action_deny_proposal 
+ 
+ 
+
+
+
   
-  - intent: deny
-  - action: action_deny_offer 
-  - intent: deny_offer
-  - action: action_deny_offer 
- 
 
 - story:  INIT GREET PATH
   steps: 
@@ -34,8 +115,8 @@ stories:
   
 - story:  info
   steps: 
-  - intent: information
-  - action: action_main
+  - intent: text_data
+  - action: action_handle_text_data
   
 
   
