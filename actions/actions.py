@@ -286,7 +286,7 @@ class ActionHandleTextData(Action):
             if len(phone_numbers)>0:
                 print("-->> VALID  Phone Number - traced.")
                 dispatcher.utter_message(text="Thanks. Our representative will contact you soon.")
-                return [SlotSet("phone_number_value",phone_numbers[0])]
+                return [SlotSet("phone_number_value",phone_numbers[0]),SlotSet("stop_bot",True)]
             else:
                 print("** In-valid - Phone Number traced.")
                 dispatcher.utter_template('utter_send_link_invalid_phone_number',tracker)

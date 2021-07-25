@@ -159,6 +159,7 @@ vin_keywords = [
     "i have vin",
     "yes, i have vin",
     "i can provide vin",
+    "yes, i can provide vin",
     "i can give you vin",
 ]
 license_plate_keywords = [
@@ -167,6 +168,7 @@ license_plate_keywords = [
     "i can give you license plate",
     "yes, i have license plate",
     "i can provide license plate",
+    "yes, i can provide license plate",
     "license plate number",
     "i have license plate number",
     "yes, i have license plate number",

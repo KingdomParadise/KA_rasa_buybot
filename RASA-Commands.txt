@@ -4,7 +4,7 @@ Activate
 source venv/bin/activate
 
 Train model
-rasa train --fixed-model-name "facebook-buy-your-car"
+rasa train --fixed-model-name "buy-your-car-v2"
 
 Check Active RASA Process
 ps -fA | grep python
@@ -13,10 +13,10 @@ Kill Process
 kill -9 <PID>
 
 Run RASA core
-nohup rasa run -m models -p 5005 --enable-api --cors "*" --endpoints endpoints.yml &
+nohup rasa run -m models -p 5006 --enable-api --cors "*" --endpoints endpoints.yml &
 
 Run RASA Actions
-nohup rasa run actions -p 5056 &
+nohup rasa run actions &
 
 Make process run forever
 nohup <command> &
@@ -36,11 +36,11 @@ Go to root directory of your RASA project
 	pip install rasa==2.4.0(Once)
 	
 4) Run RASA Core(Everytime)
-	rasa run -m models -p 5000 --enable-api --cors "*" --endpoints endpoints.yml
+	rasa run -m models -p 5006 --enable-api --cors "*" --endpoints endpoints.yml
 	
 5) Run RASA Actions(Everytime)
-	rasa run actions -p 5056
+	rasa run actions
 	
 6) Train RASA NLU
-	rasa train --fixed-model-name "facebook-buy-your-car"
+	rasa train --fixed-model-name "buy-your-car-v2"
 	
