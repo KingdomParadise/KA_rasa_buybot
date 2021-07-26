@@ -13,6 +13,14 @@
 action_endpoint:
  url: "http://localhost:5056/webhook"
 
+
+tracker_store:
+ type: SQL
+ dialect: "sqlite"
+ db: "buy-your-car-bot.db"  # path to your db
+ username:  # username used for authentication
+ password:  # password used for authentication
+
 # Tracker store which is used to store the conversations.
 # By default the conversations are stored in memory.
 # https://rasa.com/docs/rasa/tracker-stores
