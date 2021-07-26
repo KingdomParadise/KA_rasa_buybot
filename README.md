@@ -11,8 +11,8 @@ and
 ```
 2.  rasa run -m model  --enable-api --cors "*"
 ```
-
-And a CHROME EXTENSION for testing purpose
+  
+And a CHROME EXTENSION for testing purpose.
  
 ```
 https://chrome.google.com/webstore/detail/clean-all-history-cache-c/elidgjfpciimeeeoeneeiifkmhadhkeh?hl=en

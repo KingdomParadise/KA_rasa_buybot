@@ -40,7 +40,7 @@ class ActionApproveOffer(Action):
                     {"payload": "/approve_offer", "title": "Yes, I am interested"},
                     {"payload": "/deny_proposal", "title": "No, I am not interested"},
                 ] 
-                dispatcher.utter_message(text="I can give you a tentative price for your car right here if you are interested?", buttons=buttons)
+                dispatcher.utter_message(text="Ok Great, I can give you a tentative price for your car right  here if you are interested ?", buttons=buttons)
                 return [SlotSet('interested_in_tentative_price',True),SlotSet('open_approve_offers_portal',False)] 
             
         
@@ -50,11 +50,11 @@ class ActionApproveOffer(Action):
             elif tracker.get_slot('interested_in_tentative_price') is True and tracker.get_slot('license_plate_or_vin') is  None:
                 print("-->> 3rd Offer")
                 buttons = [
-                    {"payload": "/i_can_provide_vin", "title": "VIN "},
-                    {"payload": "/i_have_plate", "title": "License Plate"},
-                    {"payload": "/deny_proposal", "title": "I don't have any"},
+                    {"payload": "/i_can_provide_vin", "title": "i have VIN "},
+                    {"payload": "/i_have_plate", "title": "I have License Plate number"},
+                    {"payload": "/deny_proposal", "title": "I don't have any."},
                 ]  
-                dispatcher.utter_message(text="Do you have your vin or license plate?", buttons=buttons)
+                dispatcher.utter_message(text="Great, do you have your vin or license plate ?", buttons=buttons)
                 return [SlotSet('license_plate_or_vin',True),SlotSet('open_approve_offers_portal',False)] 
 
 
@@ -63,17 +63,17 @@ class ActionApproveOffer(Action):
             elif tracker.get_slot('vin_value') is not None and tracker.get_slot('vehicle_owning_status') is  True  and tracker.get_slot('have_miles') is  None :
                 print("-->> 5th Offer")
                 buttons = [
-                    {"payload": "/approve_offer", "title": "Yes"},
-                    {"payload": "/deny_proposal", "title": "No"},
+                    {"payload": "/approve_offer", "title": "Yes, i can give miles"},
+                    {"payload": "/deny_proposal", "title": "No, I don't have miles"},
                 ]                  
-                dispatcher.utter_message(text="Do you have miles for your vehicle?", buttons=buttons)
+                dispatcher.utter_message(text="Do you have miles for your vehicle ?", buttons=buttons)
                 return [SlotSet('have_miles',True),SlotSet('open_approve_offers_portal',False),SlotSet("vin_fetched_locker",False)] 
 
 
             # 6th Offer
             elif tracker.get_slot('have_miles') is not None and tracker.get_slot('miles_value') is  None :
                 print("-->> 6th Offer")               
-                dispatcher.utter_message(text="Please enter the miles on the vehicle")
+                dispatcher.utter_message(text="Please enter the miles on the vehicle ")
                 return [SlotSet('open_approve_offers_portal',False),SlotSet('miles_locker',True),] 
 
 
@@ -88,13 +88,13 @@ class ActionApproveOffer(Action):
                     {"payload": "/approve_offer", "title": "Yes"},
                     {"payload": "/deny_proposal", "title": "No"},
                 ]    
-                dispatcher.utter_message(text="Can you please provide your phone number?",buttons=buttons)
+                dispatcher.utter_message(text="Can you please provide your phone number?.",buttons=buttons)
                 return [SlotSet('would_like_to_talk_in_detail',True),SlotSet('open_approve_offers_portal',False), SlotSet("price_range_fetched_locker",False)] 
 
             # 8th offer
             elif tracker.get_slot('would_like_to_talk_in_detail')is True  and tracker.get_slot('phone_number_value') is None :
                 print("-->> 8th offer")
-                dispatcher.utter_message(text="Please enter your phone number")
+                dispatcher.utter_message(text="Please enter your phone number.")
                 return [SlotSet('open_approve_offers_portal',False),SlotSet('phone_number_locker',True)] 
 
 
@@ -145,8 +145,11 @@ class ActionHandleTextData(Action):
 
         if tracker.get_slot('license_plate_or_vin')=='vin' and tracker.get_slot('vin_value') is None:
             print("** VIN traced")
-            if len(message)==17:
+            message = [x for x in message.split() if len(x)==17]
+            if len(message)>0:
+                message=message[0]
                 print("-->> 17 Digit VIN traced")
+                print("-->> VIN = ", message)
                 res = VIN_VALIDATOR(message)
 
                 if res is not None:
@@ -203,9 +206,14 @@ class ActionHandleTextData(Action):
             # state api called
             print("** STATE traced")
             incoming_state = message
-            state_code = VERIFY_STATE(incoming_state)
-            if state_code is not None:
+            state_code = [VERIFY_STATE(x) for x in message.split()]
+            state_code = [x for x in state_code if x]
+             
+
+            if len(state_code)>0:
+                state_code = state_code[0]
                 print("-->> Valid STATE traced ")
+                print("-->> Valid STATE = ", state_code)
                 # plate validation api called
                 print("-->> Validating License Plate")
                 res = LICENSE_PLATE_VALIDATOR(tracker.get_slot('license_plate_value'),state_code)
@@ -235,17 +243,24 @@ class ActionHandleTextData(Action):
         # Accepting Miles Text data
         elif tracker.get_slot('have_miles') is not None and tracker.get_slot("miles_locker") is True and tracker.get_slot('miles_value') is  None :
             print("** Miles - traced")
-            if str(message).isnumeric():
+            miles = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", message)
+
+            if len(miles)>0:
+                miles = miles[0]
+
+
+
                 print("--> Valid Miles traced.")
-                print(tracker.get_slot("vin_value"))
+                print("--> Miles = ",miles)
+                print("--> VIN = ",tracker.get_slot("vin_value"))
                 price = FETCH_PRICE(tracker.get_slot("vin_value"))
                 if price is not None: 
                     buttons = [
                         {"payload": "/approve_offer", "title": "Yes"},
                         {"payload": "/deny_proposal", "title": "No"},
                     ] 
-                    dispatcher.utter_message(text=f"Here is the price range {price}, would you like to talk to our representative in detail about this price?",buttons=buttons)
-                    return [SlotSet('miles_value',message)] 
+                    dispatcher.utter_message(text=f"Here is the price range {price}, would you like to talk to our representative in detail about this price ?",buttons=buttons)
+                    return [SlotSet('miles_value',miles)] 
                 else: 
                     print("** Miles API returned NONE ")
                     dispatcher.utter_template('utter_send_link_invalid_miles',tracker)
@@ -266,7 +281,7 @@ class ActionHandleTextData(Action):
                     {"payload": "/approve_offer", "title": "Yes"},
                     {"payload": "/deny_proposal", "title": "No"},
                 ] 
-                dispatcher.utter_message(text=f"Here is the price range {price}, would you like to talk to our representative in detail about this price?",buttons=buttons)
+                dispatcher.utter_message(text=f"Here is the price range {price}, would you like to talk to our representative in detail about this price ?",buttons=buttons)
                 return [SlotSet('price_range_fetched_locker',None)] 
             else: 
                 print("** Miles API returned NONE ")
@@ -395,9 +410,9 @@ class AskPreviousQuestionLevel2(Action):
             print("-->> 1st Offer LEVEL 2")
             buttons = [
                     {"payload": "/approve_offer", "title": "Yes, I am ready to talk with with a Bot." },
-                    {"payload": "/deny_proposal", "title": "No, I can't talk with a Bot."},
+                    {"payload": "/deny_proposal", "title": "No, i can't talk with a Bot."},
                 ]
-            dispatcher.utter_message(text="Thanks for your interest in Buy Your Car, this is an interactive web chat for you to find out the price of your vehicle without any human intervention and pressure, should we start now?", buttons=buttons)
+            dispatcher.utter_message(text="Thanks for your interest in Buy Your Car, this is an interactive web chat for you to find out the price of your vehicle without any human intervention and pressure, should we start now ?", buttons=buttons)
             return [SlotSet('interested_in_selling_car',True)]
         else:
             
@@ -473,7 +488,7 @@ class ActionICanProvideVIN(Action):
         
         message=tracker.latest_message['text']
         print(f'ACTION --> ** [{message}]')  
-        dispatcher.utter_message(text="Please enter your 17 digit VIN?")
+        dispatcher.utter_message(text="Please enter your 17 digit VIN number ?")
         return [SlotSet('license_plate_or_vin','vin')] 
 
        
@@ -489,7 +504,7 @@ class ActionIHavePlate(Action):
 
         message=tracker.latest_message['text']
         print(f'ACTION --> ** [{message}]')
-        dispatcher.utter_message(text="Please enter your License Plate?")
+        dispatcher.utter_message(text="Please enter your License Plate ?")
         return [SlotSet('license_plate_or_vin','license_plate')] 
 
 
@@ -505,10 +520,10 @@ class ActionStartConversation(Action):
         print('ACTION -->', message)
         print("-->> 1st Offer")
         buttons = [
-                {"payload": "/approve_offer", "title": "Yes, I am ready to talk with with a Bot."},
-                {"payload": "/deny_proposal", "title": "No, I can't talk with a Bot."},
+                {"payload": "/approve_offer", "title": "Yes, I am ready to talk with with a Bot." },
+                {"payload": "/deny_proposal", "title": "No, i can't talk with a Bot."},
             ]
-        dispatcher.utter_message(text="Thanks for your interest in Buy Your Car, this is an interactive web chat for you to find out the price of your vehicle without any human intervention and pressure, should we start now?", buttons=buttons)
+        dispatcher.utter_message(text="Thanks for your interest in Buy Your Car, this is an interactive web chat for you to find out the price of your vehicle without any human intervention and pressure, should we start now ?", buttons=buttons)
         return [SlotSet('interested_in_selling_car',True)]
 
  

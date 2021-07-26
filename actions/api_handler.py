@@ -1,8 +1,12 @@
+from concurrent.futures import ThreadPoolExecutor
+
 import requests,re
 try:
     from .data import states
+    from .plate_extractor import GET_PLATES
 except ImportError:
     from data import states
+    from plate_extractor import GET_PLATES
 
 
 
@@ -49,20 +53,37 @@ def VIN_VALIDATOR(vin):
     else:
         return None
 
+raw_data=[]
+ 
+
+
 def LICENSE_PLATE_VALIDATOR(plate_number,state='CA'):
-    print('--> LICENSE PLATE API CALLED')
+    print('--> Plates Extracted')
+    plate_number = str(plate_number)
+    plate_numbers = GET_PLATES(plate_number)
+    print(plate_numbers)
+    print('--> LICENSE PLATE API CALLED') 
+    global raw_data
+    raw_data=[]
+
     headers = {
         "x-rapidapi-host": "us-license-plate-to-vin.p.rapidapi.com",
         "x-rapidapi-key": "ee1de273afmsh395876c18b8894dp182de0jsn9003b89dd005",
     }
     url = "https://us-license-plate-to-vin.p.rapidapi.com/licenseplate"
-    querystring = {"plate":str(plate_number),"state":state.upper()}
-    response = requests.request("GET", url, headers=headers, params=querystring).json()
-    if 'error' in response.keys():return None
-    else: 
-        response = response['specifications']['vin'] 
-        response = VIN_VALIDATOR(response)
-        return response
+
+    for plate_number in plate_numbers:
+
+        querystring = {"plate":str(plate_number),"state":state.upper()}
+        response = requests.request("GET", url, headers=headers, params=querystring).json()
+        print(response)
+
+        if 'error' not in response.keys():
+            response = response['specifications']['vin'] 
+            response = VIN_VALIDATOR(response)
+            return response
+        # return 
+
 
 
 
@@ -79,10 +100,16 @@ def VERIFY_STATE(given_state):
             return state_code
     else: return None
 
+
+
 if __name__ == '__main__':
     # print(VIN_VALIDATOR('1C4NJPBA3GD599979'))
-    print(VIN_VALIDATOR('JHMGE8H43AS002030'))
+    # print(VIN_VALIDATOR('JHMGE8H43AS002030'))
     # given_state = 'caLIFORNIA'
+    res = LICENSE_PLATE_VALIDATOR('LDWV322220 [LDWV30 is my plate number','fl')
+    print(res)
+
     # print(LICENSE_PLATE_VALIDATOR('LDWV30','fl'))
-         
+
+ 
   

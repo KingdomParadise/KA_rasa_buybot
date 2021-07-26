@@ -80,6 +80,7 @@ accept_keywords = [
     "yes i would like to talk to your rep in detail about this price",
 
     "yes i have",
+    "yes i can",
     "yes i have miles",
     "i can provide miles",
     "i can give you miles",
@@ -179,7 +180,29 @@ license_plate_keywords = [
     "i can provide plate number",
     "i can give you license plate number",
     "i can give you plate number",
+]
 
-
+text_to_be_removed = [
+    'car','vehicle','the','is'
 ]
  
+ 
+
+
+
+accept_keywords = [x.split() for x in accept_keywords]
+accept_keywords = sum(accept_keywords,[])
+
+deny_keywords = [x.split() for x in deny_keywords]
+deny_keywords = sum(deny_keywords,[])
+
+vin_keywords = [x.split() for x in vin_keywords]
+vin_keywords = sum(vin_keywords,[])
+
+license_plate_keywords = [x.split() for x in license_plate_keywords]
+license_plate_keywords = sum(license_plate_keywords,[])
+
+text_to_be_removed = [x.split() for x in text_to_be_removed]
+text_to_be_removed = sum(text_to_be_removed,[])
+
+words = accept_keywords+deny_keywords+vin_keywords+license_plate_keywords+text_to_be_removed
