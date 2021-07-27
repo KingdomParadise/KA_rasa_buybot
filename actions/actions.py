@@ -523,7 +523,7 @@ class ActionStartConversation(Action):
                 {"payload": "/approve_offer", "title": "Yes, I am ready to talk with with a Bot." },
                 {"payload": "/deny_proposal", "title": "No, I can't talk with a Bot."},
             ]
-        dispatcher.utter_message(text="Thanks for your interest in Buy Your Car, this is an interactive web chat for you to find out the price of your vehicle without any human intervention and pressure, should we start now ?", buttons=buttons)
+        dispatcher.utter_message(text="Thanks for your interest in Buy Your Car, this is an interactive web chat for you to find out the price of your vehicle without any human intervention and pressure, should we start now?", buttons=buttons)
         return [SlotSet('interested_in_selling_car',True)]
 
  
