@@ -243,7 +243,9 @@ class ActionHandleTextData(Action):
         # Accepting Miles Text data
         elif tracker.get_slot('have_miles') is not None and tracker.get_slot("miles_locker") is True and tracker.get_slot('miles_value') is  None :
             print("** Miles - traced")
-            miles = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", message)
+            # miles = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", message)
+            miles = re.findall("(:?^|\s)(?=.)((?:0|(?:[1-9](?:\d*|\d{0,2}(?:,\d{3})*)))?(?:\.\d*[1-9])?)(?!\S)", message)
+            miles = [x[-1] for x in miles]
 
             if len(miles)>0:
                 miles = miles[0]
@@ -297,6 +299,7 @@ class ActionHandleTextData(Action):
         # Accepting Phone Number Text data
         elif tracker.get_slot('would_like_to_talk_in_detail')is True  and tracker.get_slot("phone_number_locker") is True and tracker.get_slot('phone_number_value') is None :
             print("** Phone Number - traced.")
+            # phone_numbers = re.findall(r'[\+\(]?[0-9][0-9 .\-\(\)]{8,}[0-9]', message)
             phone_numbers = re.findall(r'[\+\(]?[0-9][0-9 .\-\(\)]{8,}[0-9]', message)
             if len(phone_numbers)>0:
                 print("-->> VALID  Phone Number - traced.")
